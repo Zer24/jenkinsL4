@@ -20,8 +20,8 @@ pipeline {
                 checkout scm
                 // Для работы с git командами нужно настроить git config
                 script {
-                    sh 'git config --global user.email "jenkins@example.com"'
-                    sh 'git config --global user.name "Jenkins CI"'
+                    bat 'git config --global user.email "jenkins@example.com"'
+                    bat 'git config --global user.name "Jenkins CI"'
                 }
             }
         }
@@ -29,16 +29,16 @@ pipeline {
         // ========== 2. Clean & Compile ==========
         stage('Clean & Compile') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         // ========== 3. Static Code Analysis ==========
         stage('Static Code Analysis') {
             steps {
-                sh 'mvn spotbugs:check || true'
-                sh 'mvn checkstyle:check || true'
-                sh 'mvn pmd:check || true'
+                bat 'mvn spotbugs:check || true'
+                bat 'mvn checkstyle:check || true'
+                bat 'mvn pmd:check || true'
 
                 recordIssues tools: [
                     spotBugs(pattern: '**/spotbugsXml.xml'),
@@ -51,7 +51,7 @@ pipeline {
         // ========== 4. Build JAR ==========
         stage('Build JAR') {
             steps {
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
 
@@ -81,22 +81,15 @@ pipeline {
                     echo "JAR file: ${jarPath}"
                     echo "Tag name: ${tagName}"
 
-                    // Проверяем, установлен ли GitHub CLI
-                    sh 'gh --version'
-
-                    // Создаём релиз и загружаем JAR
-                    // --notes "Auto-generated release from Jenkins build ${BUILD_NUMBER}"
-                    // --title "Release ${version}"
-                    sh """
-                        gh release create ${tagName} \
-                            ${jarPath} \
-                            --repo ${REPO_NAME} \
-                            --title "Release ${version}" \
-                            --notes "Автоматический релиз из Jenkins Build #${BUILD_NUMBER} для ветки ${env.BRANCH_NAME}" \
-                            --latest=false
+                    bat """
+                        curl -X POST \
+                          -H "Authorization: token ${GH_TOKEN}" \
+                          -H "Content-Type: application/json" \
+                          https://api.github.com/repos/${REPO_NAME}/releases \
+                          -d "{\"tag_name\":\"${tagName}\",\"name\":\"Release ${BUILD_NUMBER}\",\"body\":\"Auto release from Jenkins\",\"draft\":false,\"prerelease\":false}"
                     """
 
-                    echo "✅ GitHub Release created successfully: https://github.com/${REPO_NAME}/releases/tag/${tagName}"
+                    echo "GitHub Release created successfully: https://github.com/${REPO_NAME}/releases/tag/${tagName}"
                 }
             }
         }
