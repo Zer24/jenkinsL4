@@ -20,15 +20,15 @@ pipeline {
 
         stage('Clean & Compile') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Static Code Analysis') {
             steps {
-                sh 'mvn spotbugs:check || exit 0'
-                sh 'mvn checkstyle:check || exit 0'
-                sh 'mvn pmd:check || exit 0'
+                bat 'mvn spotbugs:check || exit 0'
+                bat 'mvn checkstyle:check || exit 0'
+                bat 'mvn pmd:check || exit 0'
 
                 recordIssues tools: [
                     spotBugs(pattern: '**/spotbugsXml.xml'),
@@ -40,7 +40,7 @@ pipeline {
 
         stage('Build JAR') {
             steps {
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
 
@@ -57,7 +57,7 @@ pipeline {
                     def jarFile = findFiles(glob: 'target/*.jar')[0]
                     def tagName = "release-v${BUILD_NUMBER}"
 
-                    sh """
+                    bat """
                         gh release create ${tagName} \
                             ${jarFile.path} \
                             --repo ${REPO_NAME} \
