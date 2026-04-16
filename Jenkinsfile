@@ -21,9 +21,9 @@ pipeline {
 
         stage('Static Code Analysis') {
             steps {
-                sh 'mvn spotbugs:check || true'
-                sh 'mvn checkstyle:check || true'
-                sh 'mvn pmd:check || true'
+                sh 'mvn spotbugs:check || exit 0'
+                sh 'mvn checkstyle:check || exit 0'
+                sh 'mvn pmd:check || exit 0'
 
                 recordIssues tools: [
                     spotBugs(pattern: '**/spotbugsXml.xml'),
