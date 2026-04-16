@@ -15,15 +15,15 @@ pipeline {
 
         stage('Clean & Compile') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Static Code Analysis') {
             steps {
-                sh 'mvn spotbugs:check || exit 0'
-                sh 'mvn checkstyle:check || exit 0'
-                sh 'mvn pmd:check || exit 0'
+                bat 'mvn spotbugs:check || exit 0'
+                bat 'mvn checkstyle:check || exit 0'
+                bat 'mvn pmd:check || exit 0'
 
                 recordIssues tools: [
                     spotBugs(pattern: '**/spotbugsXml.xml'),
@@ -35,7 +35,7 @@ pipeline {
 
         stage('Build JAR') {
             steps {
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
 
@@ -45,18 +45,16 @@ pipeline {
             }
         }
 
-        // НЕТ GitHub Release
         stage('Info') {
             steps {
-                echo "📌 DEVELOP ветка: JAR собран, но НЕ загружен в релизы"
-                echo "📌 Только для тестирования интеграции"
+                echo "DEVELOP ветка: JAR собран, но не загружен в релизы"
             }
         }
     }
 
     post {
         success {
-            echo "✅ DEVELOP ветка: сборка успешна (релиз не создаётся)"
+            echo "DEVELOP ветка: сборка успешна"
         }
     }
 }
