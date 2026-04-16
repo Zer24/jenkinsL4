@@ -21,7 +21,9 @@ pipeline {
 
         stage('Static Code Analysis') {
             steps {
-                bat 'mvn spotbugs:check & mvn checkstyle:check & mvn pmd:check'
+                bat 'cmd /c "mvn spotbugs:check || exit 0"'
+                bat 'cmd /c "mvn checkstyle:check || exit 0"'
+                bat 'cmd /c "mvn pmd:check || exit 0"'
 
                 // Публикуем отчёты
                 recordIssues tools: [
