@@ -21,10 +21,7 @@ pipeline {
 
         stage('Static Code Analysis') {
             steps {
-                // Запускаем каждый анализатор отдельно, не останавливаясь при ошибках
-                bat 'mvn spotbugs:spotbugs; exit 0'
-                bat 'mvn checkstyle:checkstyle; exit 0'
-                bat 'mvn pmd:pmd; exit 0'
+                bat 'mvn spotbugs:check & mvn checkstyle:check & mvn pmd:check'
 
                 // Публикуем отчёты
                 recordIssues tools: [
