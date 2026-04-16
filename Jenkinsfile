@@ -10,19 +10,19 @@ pipeline {
 
         stage('Clean & Compile') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Static Code Analysis') {
             steps {
-                sh 'mvn spotbugs:check checkstyle:check pmd:check'
+                bat 'mvn spotbugs:check checkstyle:check pmd:check'
             }
         }
 
         stage('Build JAR') {
             steps {
-                sh 'mvn package -DskipTests'
+                bat 'mvn package -DskipTests'
             }
         }
 
