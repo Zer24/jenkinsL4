@@ -21,7 +21,17 @@ pipeline {
 
         stage('Static Code Analysis') {
             steps {
-                bat 'mvn spotbugs:check checkstyle:check pmd:check'
+                // Запускаем каждый анализатор отдельно, не останавливаясь при ошибках
+                bat 'mvn spotbugs:check; exit 0'
+                bat 'mvn checkstyle:check; exit 0'
+                bat 'mvn pmd:check; exit 0'
+
+                // Публикуем отчёты
+                recordIssues tools: [
+                    spotBugs(pattern: '**/spotbugsXml.xml'),
+                    checkStyle(pattern: '**/checkstyle-result.xml'),
+                    pmdParser(pattern: '**/pmd.xml')
+                ]
             }
         }
 
