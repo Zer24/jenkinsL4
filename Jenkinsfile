@@ -36,9 +36,9 @@ pipeline {
         // ========== 3. Static Code Analysis ==========
         stage('Static Code Analysis') {
             steps {
-                bat 'mvn spotbugs:check || true'
-                bat 'mvn checkstyle:check || true'
-                bat 'mvn pmd:check || true'
+                bat 'mvn spotbugs:check || exit 0'
+                bat 'mvn checkstyle:check || exit 0'
+                bat 'mvn pmd:check || exit 0'
 
                 recordIssues tools: [
                     spotBugs(pattern: '**/spotbugsXml.xml'),
