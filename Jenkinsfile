@@ -10,7 +10,7 @@ pipeline {
         // Загружаем GitHub токен из Jenkins Credentials
         GH_TOKEN = credentials('github-token')
         // Определяем имя репозитория (замените на свой!)
-        REPO_NAME = 'YOUR_USERNAME/YOUR_REPO_NAME'
+        REPO_NAME = 'https://github.com/Zer24/jenkinsL4.git'
     }
 
     stages {
