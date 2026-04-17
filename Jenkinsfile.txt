@@ -9,6 +9,9 @@ pipeline {
     environment {
         GH_TOKEN = credentials('github-token')
         REPO_NAME = 'https://github.com/Zer24/jenkinsL4.git'
+        JAVA_TOOL_OPTIONS = '-Dfile.encoding=UTF-8'
+        LANG = 'en_US.UTF-8'
+        LC_ALL = 'en_US.UTF-8'
     }
 
     stages {
