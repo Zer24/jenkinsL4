@@ -59,7 +59,7 @@ pipeline {
 
                     bat """
                         gh release create ${tagName} \
-                            ${jarFile.path} \
+                            ${jarFile} \
                             --repo ${REPO_NAME} \
                             --title "Production Release ${BUILD_NUMBER}" \
                             --notes "Релиз из main ветки" \
