@@ -9,9 +9,6 @@ pipeline {
     environment {
         GH_TOKEN = credentials('github-token')
         REPO_NAME = 'https://github.com/Zer24/jenkinsL4.git'
-        JAVA_TOOL_OPTIONS = '-Dfile.encoding=UTF-8'
-        LANG = 'en_US.UTF-8'
-        LC_ALL = 'en_US.UTF-8'
     }
 
     stages {
@@ -59,18 +56,13 @@ pipeline {
                 script {
                     def jarFile = "target/JenkinsProjj-1.0-SNAPSHOT-jar-with-dependencies.jar"
                     def tagName = "release-v${BUILD_NUMBER}"
-
-                bat """
-                    chcp 65001 > nul
-                    set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
-                """
-
+                    
                     bat """
                         gh release create ${tagName} \
                             ${jarFile} \
                             --repo ${REPO_NAME} \
                             --title "Production Release ${BUILD_NUMBER}" \
-                            --notes "Релиз из main ветки" \
+                            --notes "Jenkins main branch Release" \
                             --latest=true
                     """
                     echo "✅ Создан релиз на GitHub"
