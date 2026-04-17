@@ -60,6 +60,11 @@ pipeline {
                     def jarFile = "target/JenkinsProjj-1.0-SNAPSHOT-jar-with-dependencies.jar"
                     def tagName = "release-v${BUILD_NUMBER}"
 
+                bat """
+                    chcp 65001 > nul
+                    set JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8
+                """
+
                     bat """
                         gh release create ${tagName} \
                             ${jarFile} \
