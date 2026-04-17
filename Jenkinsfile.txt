@@ -25,7 +25,11 @@ pipeline {
                 bat 'mvn checkstyle:check || exit 0'
                 bat 'mvn pmd:check || exit 0'
 
-                echo "Быстрый статический анализ выполнен"
+                recordIssues tools: [
+                    spotBugs(pattern: '**/spotbugsXml.xml'),
+                    checkStyle(pattern: '**/checkstyle-result.xml'),
+                    pmdParser(pattern: '**/pmd.xml')
+                ]
             }
         }
 
