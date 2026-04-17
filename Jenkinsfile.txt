@@ -15,16 +15,15 @@ pipeline {
 
         stage('Clean & Compile') {
             steps {
-                sh 'mvn clean compile'
+                bat 'mvn clean compile'
             }
         }
 
         stage('Static Code Analysis (Fast)') {
             steps {
-                // Только быстрая проверка, без генерации полных отчётов
-                sh 'mvn spotbugs:check || exit 0'
-                sh 'mvn checkstyle:check || exit 0'
-                sh 'mvn pmd:check || exit 0'
+                bat 'mvn spotbugs:check || exit 0'
+                bat 'mvn checkstyle:check || exit 0'
+                bat 'mvn pmd:check || exit 0'
 
                 echo "Быстрый статический анализ выполнен"
             }
